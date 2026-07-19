@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Employees — TalentMap{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Employees</h1>
+    <p class="page-subtitle">{{ total }} employee{{ total|pluralize }} in the system.</p>
+  </div>
+  <a href="{% url 'add_employee' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Employee</a>
+</div>
+
+<div class="card-panel">
+  <form method="get" class="filter-bar">
+    <div class="filter-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" name="search" value="{{ search }}" class="form-control" placeholder="Search name, ID, email...">
+    </div>
+    <select name="department" class="form-select filter-select">
+      <option value="">All Departments</option>
+      {% for d in departments %}<option value="{{ d }}" {% if department == d %}selected{% endif %}>{{ d }}</option>{% endfor %}
+    </select>
+    <select name="role" class="form-select filter-select">
+      <option value="">All Roles</option>
+      {% for r in roles %}<option value="{{ r.role }}" {% if role == r.role %}selected{% endif %}>{{ r.role }}</option>{% endfor %}
+    </select>
+    <button class="btn btn-primary" type="submit"><i class="fa-solid fa-filter"></i> Apply</button>
+    <a href="{% url 'employee_list' %}" class="btn btn-soft">Reset</a>
+  </form>
+
+  {% if employees %}
+  <div class="table-responsive">
+    <table class="table modern-table">
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Department</th>
+          <th>Role</th>
+          <th>Skills</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for emp in employees %}
+        <tr>
+          <td>
+            <div class="cell-user">
+              <div class="cell-avatar">{{ emp.name|slice:":1"|upper }}</div>
+              <div>
+                <div class="cell-name">{{ emp.name }}</div>
+                <div class="cell-sub">{{ emp.employee_id }} · {{ emp.email }}</div>
+              </div>
+            </div>
+          </td>
+          <td>{{ emp.department }}</td>
+          <td>{{ emp.role }}</td>
+          <td>
+            <div class="skill-chips">
+              {% for s in emp.skills|slice:":3" %}<span class="skill-chip">{{ s }}</span>{% endfor %}
+              {% if emp.skills|length > 3 %}<span class="skill-chip more">+{{ emp.skills|length|add:-3 }}</span>{% endif %}
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="row-actions">
+              <a href="{% url 'employee_profile' emp.id %}" class="icon-action" title="View"><i class="fa-solid fa-eye"></i></a>
+              <a href="{% url 'edit_employee' emp.id %}" class="icon-action" title="Edit"><i class="fa-solid fa-pen"></i></a>
+              <a href="{% url 'gap_report' emp.id %}" class="icon-action accent" title="Analyze"><i class="fa-solid fa-chart-simple"></i></a>
+              <button class="icon-action danger" title="Delete" data-confirm data-confirm-url="{% url 'delete_employee' emp.id %}" data-confirm-text="Delete employee {{ emp.name }}?"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if total_pages > 1 %}
+  <nav class="pagination-bar">
+    <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
+    <div class="page-controls">
+      {% if has_prev %}<a href="?page={{ prev_page }}&search={{ search }}&department={{ department }}&role={{ role }}" class="btn btn-soft btn-sm"><i class="fa-solid fa-chevron-left"></i></a>{% endif %}
+      {% if has_next %}<a href="?page={{ next_page }}&search={{ search }}&department={{ department }}&role={{ role }}" class="btn btn-soft btn-sm"><i class="fa-solid fa-chevron-right"></i></a>{% endif %}
+    </div>
+  </nav>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    <i class="fa-regular fa-folder-open"></i>
+    <p>No employees found. Try adjusting your filters or add a new employee.</p>
+    <a href="{% url 'add_employee' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Employee</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

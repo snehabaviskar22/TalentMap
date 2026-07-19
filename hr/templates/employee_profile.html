@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if employee %}{{ employee.name }}{% else %}Employee{% endif %} — TalentMap{% endblock %}
+
+{% block content %}
+{% if employee %}
+<div class="page-head">
+  <div>
+    <h1 class="page-title">{{ employee.name }}</h1>
+    <p class="page-subtitle">{{ employee.employee_id }} · {{ employee.email }}</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'edit_employee' employee.id %}" class="btn btn-soft"><i class="fa-solid fa-pen"></i> Edit</a>
+    <a href="{% url 'gap_report' employee.id %}" class="btn btn-primary"><i class="fa-solid fa-chart-simple"></i> Analyze</a>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card-panel profile-card">
+      <div class="profile-avatar-lg">{{ employee.name|slice:":1"|upper }}</div>
+      <h3 class="profile-name">{{ employee.name }}</h3>
+      <span class="profile-role">{{ employee.role }}</span>
+      <div class="profile-info">
+        <div><i class="fa-solid fa-id-card"></i> {{ employee.employee_id }}</div>
+        <div><i class="fa-solid fa-envelope"></i> {{ employee.email }}</div>
+        <div><i class="fa-solid fa-building"></i> {{ employee.department }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card-panel">
+      <div class="panel-head"><h3><i class="fa-solid fa-tags"></i> Skills</h3></div>
+      {% if employee.skills %}
+      <div class="skill-chips">
+        {% for s in employee.skills %}<span class="skill-chip">{{ s }}</span>{% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state small"><i class="fa-regular fa-folder-open"></i><p>No skills recorded.</p></div>
+      {% endif %}
+    </div>
+    <div class="card-panel mt-3">
+      <div class="panel-head"><h3><i class="fa-solid fa-bolt"></i> Actions</h3></div>
+      <div class="quick-actions">
+        <a href="{% url 'gap_report' employee.id %}" class="quick-action"><i class="fa-solid fa-chart-simple"></i> Skill Gap Report</a>
+        <a href="{% url 'recommendations' employee.id %}" class="quick-action"><i class="fa-solid fa-graduation-cap"></i> Training Recommendations</a>
+        <a href="{% url 'edit_employee' employee.id %}" class="quick-action"><i class="fa-solid fa-pen"></i> Edit Employee</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="empty-state">
+  <i class="fa-regular fa-circle-question"></i>
+  <p>Employee not found.</p>
+  <a href="{% url 'employee_list' %}" class="btn btn-primary">Back to Employees</a>
+</div>
+{% endif %}
+{% endblock %}

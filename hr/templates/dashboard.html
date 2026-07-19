@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard — TalentMap{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-subtitle">Welcome back, {{ request.user.username }}. Here's your HR overview.</p>
+  </div>
+  <a href="{% url 'add_employee' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Employee</a>
+</div>
+
+<!-- Stat cards -->
+<div class="stat-grid">
+  <div class="stat-card stat-primary">
+    <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+    <div class="stat-meta">
+      <span class="stat-label">Total Employees</span>
+      <span class="stat-value">{{ total_employees }}</span>
+    </div>
+  </div>
+  <div class="stat-card stat-secondary">
+    <div class="stat-icon"><i class="fa-solid fa-id-badge"></i></div>
+    <div class="stat-meta">
+      <span class="stat-label">Total Roles</span>
+      <span class="stat-value">{{ total_roles }}</span>
+    </div>
+  </div>
+  <div class="stat-card stat-accent">
+    <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+    <div class="stat-meta">
+      <span class="stat-label">Total Courses</span>
+      <span class="stat-value">{{ total_courses }}</span>
+    </div>
+  </div>
+  <div class="stat-card stat-warning">
+    <div class="stat-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <div class="stat-meta">
+      <span class="stat-label">Skill Gaps</span>
+      <span class="stat-value">{{ employees_with_gaps }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- Charts placeholders + quick actions -->
+<div class="row g-3 mt-1">
+  <div class="col-lg-8">
+    <div class="card-panel">
+      <div class="panel-head">
+        <h3><i class="fa-solid fa-chart-column"></i> Workforce Overview</h3>
+      </div>
+      <div class="chart-placeholder">
+        <div class="chart-bars">
+          <div class="bar" style="height: 60%"></div>
+          <div class="bar" style="height: 80%"></div>
+          <div class="bar" style="height: 45%"></div>
+          <div class="bar" style="height: 90%"></div>
+          <div class="bar" style="height: 70%"></div>
+          <div class="bar" style="height: 55%"></div>
+          <div class="bar" style="height: 75%"></div>
+        </div>
+        <div class="chart-legend">
+          <span>Eng</span><span>Analytics</span><span>Ops</span><span>HR</span><span>Sales</span><span>Product</span><span>Design</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card-panel h-100">
+      <div class="panel-head">
+        <h3><i class="fa-solid fa-bolt"></i> Quick Actions</h3>
+      </div>
+      <div class="quick-actions">
+        <a href="{% url 'add_employee' %}" class="quick-action"><i class="fa-solid fa-user-plus"></i> Add Employee</a>
+        <a href="{% url 'roles' %}" class="quick-action"><i class="fa-solid fa-id-badge"></i> Manage Roles</a>
+        <a href="{% url 'courses' %}" class="quick-action"><i class="fa-solid fa-graduation-cap"></i> Manage Courses</a>
+        <a href="{% url 'employee_list' %}" class="quick-action"><i class="fa-solid fa-magnifying-glass-chart"></i> Analyze Skills</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent employees + activity -->
+<div class="row g-3 mt-1">
+  <div class="col-lg-7">
+    <div class="card-panel">
+      <div class="panel-head">
+        <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Employees</h3>
+        <a href="{% url 'employee_list' %}" class="link-muted">View all</a>
+      </div>
+      {% if recent_employees %}
+      <div class="table-responsive">
+        <table class="table modern-table">
+          <thead>
+            <tr><th>Employee</th><th>Department</th><th>Role</th><th>Skills</th><th></th></tr>
+          </thead>
+          <tbody>
+            {% for emp in recent_employees %}
+            <tr>
+              <td>
+                <div class="cell-user">
+                  <div class="cell-avatar">{{ emp.name|slice:":1"|upper }}</div>
+                  <div>
+                    <div class="cell-name">{{ emp.name }}</div>
+                    <div class="cell-sub">{{ emp.employee_id }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>{{ emp.department }}</td>
+              <td>{{ emp.role }}</td>
+              <td>
+                <div class="skill-chips">
+                  {% for s in emp.skills|slice:":3" %}<span class="skill-chip">{{ s }}</span>{% endfor %}
+                  {% if emp.skills|length > 3 %}<span class="skill-chip more">+{{ emp.skills|length|add:-3 }}</span>{% endif %}
+                </div>
+              </td>
+              <td class="text-end"><a href="{% url 'gap_report' emp.id %}" class="btn btn-soft btn-sm">Analyze</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <i class="fa-regular fa-folder-open"></i>
+        <p>No employees yet. Add your first employee to get started.</p>
+        <a href="{% url 'add_employee' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Employee</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card-panel h-100">
+      <div class="panel-head">
+        <h3><i class="fa-solid fa-wave-square"></i> Recent Activity</h3>
+      </div>
+      <ul class="activity-list">
+        <li><span class="dot dot-primary"></span> <strong>{{ total_employees }}</strong> employees in the system</li>
+        <li><span class="dot dot-secondary"></span> <strong>{{ total_roles }}</strong> roles configured</li>
+        <li><span class="dot dot-warning"></span> <strong>{{ employees_with_gaps }}</strong> employees have skill gaps</li>
+        <li><span class="dot dot-accent"></span> <strong>{{ total_courses }}</strong> training courses available</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Manage Roles — TalentMap{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Manage Roles</h1>
+    <p class="page-subtitle">{{ roles|length }} role{{ roles|length|pluralize }} configured.</p>
+  </div>
+  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#roleModal" id="addRoleBtn"><i class="fa-solid fa-plus"></i> Add Role</button>
+</div>
+
+<div class="card-panel">
+  <form method="get" class="filter-bar">
+    <div class="filter-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" name="search" value="{{ search }}" class="form-control" placeholder="Search roles...">
+    </div>
+    <button class="btn btn-primary" type="submit"><i class="fa-solid fa-filter"></i> Apply</button>
+    <a href="{% url 'roles' %}" class="btn btn-soft">Reset</a>
+  </form>
+
+  {% if roles %}
+  <div class="table-responsive">
+    <table class="table modern-table">
+      <thead>
+        <tr><th>Role</th><th>Required Skills</th><th class="text-end">Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for r in roles %}
+        <tr>
+          <td><span class="cell-name">{{ r.role }}</span></td>
+          <td>
+            <div class="skill-chips">
+              {% for s in r.required_skills %}<span class="skill-chip">{{ s }}</span>{% endfor %}
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="row-actions">
+              <a href="{% url 'edit_role' r.id %}" class="icon-action" title="Edit"><i class="fa-solid fa-pen"></i></a>
+              <button class="icon-action danger" title="Delete" data-confirm data-confirm-url="{% url 'delete_role' r.id %}" data-confirm-text="Delete role {{ r.role }}?"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <i class="fa-regular fa-folder-open"></i>
+    <p>No roles found. Add a role to define required skills.</p>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#roleModal"><i class="fa-solid fa-plus"></i> Add Role</button>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Add role modal -->
+<div class="modal fade" id="roleModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fa-solid fa-id-badge"></i> Add Role</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="post" action="{% url 'add_role' %}">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Role Name</label>
+            <input type="text" name="role" class="form-control" placeholder="Backend Developer" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Required Skills <span class="hint">(comma separated)</span></label>
+            <input type="text" name="required_skills" class="form-control" placeholder="Python, SQL, Docker">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-soft" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Role</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if edit_role %}
+<!-- Edit role modal (auto-open when editing) -->
+<div class="modal fade" id="editRoleModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fa-solid fa-pen"></i> Edit Role</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="post" action="{% url 'edit_role' edit_role.id %}">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Role Name</label>
+            <input type="text" name="role" class="form-control" value="{{ edit_role.role }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Required Skills <span class="hint">(comma separated)</span></label>
+            <input type="text" name="required_skills" class="form-control" value="{{ edit_role.required_skills|join:', ' }}">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="{% url 'roles' %}" class="btn btn-soft">Cancel</a>
+          <button class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Update Role</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>document.addEventListener('DOMContentLoaded',function(){new bootstrap.Modal(document.getElementById('editRoleModal')).show();});</script>
+{% endif %}
+{% endblock %}

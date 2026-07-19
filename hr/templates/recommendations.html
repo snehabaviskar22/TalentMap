@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Training Recommendations — TalentMap{% endblock %}
+
+{% block content %}
+{% if error %}
+<div class="empty-state">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <p>{{ error }}</p>
+  <a href="{% url 'employee_list' %}" class="btn btn-primary">Back to Employees</a>
+</div>
+{% else %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Training Recommendations</h1>
+    <p class="page-subtitle">Recommended courses for {{ gap.employee.name }} to close skill gaps.</p>
+  </div>
+  <a href="{% url 'gap_report' gap.employee.id %}" class="btn btn-soft"><i class="fa-solid fa-arrow-left"></i> Gap Report</a>
+</div>
+
+<div class="card-panel gap-summary">
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+    <div>
+      <h3 class="mb-1">{{ gap.employee.name }}</h3>
+      <span class="text-muted">{{ gap.employee.role }} · {{ gap.completion_percentage|floatformat:0 }}% match</span>
+    </div>
+    <div class="missing-pills">
+      <span class="miss-label">Missing:</span>
+      {% for s in gap.missing_skills %}<span class="skill-chip miss">{{ s }}</span>{% endfor %}
+      {% if not gap.missing_skills %}<span class="text-muted">No gaps detected.</span>{% endif %}
+    </div>
+  </div>
+</div>
+
+{% if recommendations %}
+<div class="course-grid mt-3">
+  {% for c in recommendations %}
+  <div class="course-card">
+    <div class="course-head">
+      <div class="course-icon"><i class="fa-solid fa-book-open"></i></div>
+      <span class="course-level level-{{ c.level|lower }}">{{ c.level }}</span>
+    </div>
+    <h3 class="course-title">{{ c.course_name }}</h3>
+    <div class="course-skill"><i class="fa-solid fa-tag"></i> {{ c.skill }}</div>
+    <p class="course-desc">{{ c.description|default:"No description available." }}</p>
+    <div class="course-foot">
+      <span class="course-duration"><i class="fa-regular fa-clock"></i> {{ c.duration }}</span>
+      <span class="course-difficulty"><i class="fa-solid fa-signal"></i> {{ c.level }}</span>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <i class="fa-solid fa-circle-check"></i>
+  <p>No training recommendations needed — all required skills are covered, or no matching courses exist.</p>
+  <a href="{% url 'courses' %}" class="btn btn-primary"><i class="fa-solid fa-graduation-cap"></i> Manage Courses</a>
+</div>
+{% endif %}
+
+{% endif %}
+{% endblock %}

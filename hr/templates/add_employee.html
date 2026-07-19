@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if mode == 'edit' %}Edit Employee{% else %}Add Employee{% endif %} — TalentMap{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1 class="page-title">{% if mode == 'edit' %}Edit Employee{% else %}Add Employee{% endif %}</h1>
+    <p class="page-subtitle">{% if mode == 'edit' %}Update employee details and skills.{% else %}Create a new employee record in MongoDB.{% endif %}</p>
+  </div>
+  <a href="{% url 'employee_list' %}" class="btn btn-soft"><i class="fa-solid fa-arrow-left"></i> Back</a>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="card-panel">
+      <div class="panel-head"><h3><i class="fa-solid fa-user-pen"></i> Employee Details</h3></div>
+      <form method="post" action="{% if mode == 'edit' %}{% url 'edit_employee' employee_id %}{% else %}{% url 'add_employee' %}{% endif %}" id="employeeForm" novalidate>
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Employee ID</label>
+            <input type="text" name="employee_id" id="id_employee_id" class="form-control" placeholder="EMP001" value="{{ form.employee_id.value|default:'' }}" required>
+            {% if form.employee_id.errors %}<div class="field-error">{{ form.employee_id.errors|join:', ' }}</div>{% endif %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="name" id="id_name" class="form-control" placeholder="Jane Doe" value="{{ form.name.value|default:'' }}" required>
+            {% if form.name.errors %}<div class="field-error">{{ form.name.errors|join:', ' }}</div>{% endif %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" id="id_email" class="form-control" placeholder="jane@company.com" value="{{ form.email.value|default:'' }}" required>
+            {% if form.email.errors %}<div class="field-error">{{ form.email.errors|join:', ' }}</div>{% endif %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Department</label>
+            <input type="text" name="department" id="id_department" class="form-control" placeholder="Engineering" value="{{ form.department.value|default:'' }}" required>
+            {% if form.department.errors %}<div class="field-error">{{ form.department.errors|join:', ' }}</div>{% endif %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Role</label>
+            <input type="text" name="role" id="id_role" class="form-control" list="roleList" placeholder="Backend Developer" value="{{ form.role.value|default:'' }}" required>
+            <datalist id="roleList">
+              {% for r in roles %}<option value="{{ r.role }}">{% endfor %}
+            </datalist>
+            {% if form.role.errors %}<div class="field-error">{{ form.role.errors|join:', ' }}</div>{% endif %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Skills <span class="hint">(comma separated)</span></label>
+            <input type="text" name="skills" id="id_skills" class="form-control" placeholder="Python, SQL, HTML" value="{{ form.skills.value|default:'' }}">
+            <div class="hint">Example: Python, SQL, HTML</div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <a href="{% url 'employee_list' %}" class="btn btn-soft">Cancel</a>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Employee</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card-panel">
+      <div class="panel-head"><h3><i class="fa-solid fa-circle-info"></i> Tips</h3></div>
+      <ul class="tips-list">
+        <li>Use a unique Employee ID like <code>EMP001</code>.</li>
+        <li>Enter skills separated by commas — they are normalized automatically.</li>
+        <li>Assign a role to enable skill gap analysis.</li>
+        <li>Roles can be managed from the <a href="{% url 'roles' %}">Manage Roles</a> page.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Skill Gap Report — TalentMap{% endblock %}
+
+{% block content %}
+{% if error %}
+<div class="empty-state">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <p>{{ error }}</p>
+  <a href="{% url 'employee_list' %}" class="btn btn-primary">Back to Employees</a>
+</div>
+{% else %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Skill Gap Report</h1>
+    <p class="page-subtitle">{{ gap.employee.name }} · {{ gap.employee.role }}</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'employee_profile' gap.employee.id %}" class="btn btn-soft"><i class="fa-solid fa-arrow-left"></i> Profile</a>
+    <a href="{% url 'recommendations' gap.employee.id %}" class="btn btn-primary"><i class="fa-solid fa-graduation-cap"></i> Recommendations</a>
+  </div>
+</div>
+
+<!-- Completion summary -->
+<div class="card-panel gap-summary">
+  <div class="row align-items-center g-3">
+    <div class="col-md-4 text-center">
+      <div class="completion-ring" style="--p: {{ gap.completion_percentage|floatformat:0 }}">
+        <div class="completion-inner">
+          <span class="completion-num">{{ gap.completion_percentage|floatformat:0 }}%</span>
+          <span class="completion-label">Match</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <h3>Skill Match Completion</h3>
+      <p class="text-muted">Percentage of required role skills already covered by the employee.</p>
+      <div class="progress gap-progress">
+        <div class="progress-bar" style="width: {{ gap.completion_percentage|floatformat:0 }}%"></div>
+      </div>
+      <div class="gap-stats">
+        <span class="gap-stat ok"><i class="fa-solid fa-circle-check"></i> {{ gap.matched_skills|length }} Matched</span>
+        <span class="gap-stat miss"><i class="fa-solid fa-circle-exclamation"></i> {{ gap.missing_skills|length }} Missing</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 mt-1">
+  <!-- Current skills -->
+  <div class="col-lg-4">
+    <div class="card-panel h-100">
+      <div class="panel-head"><h3><i class="fa-solid fa-user"></i> Current Skills</h3></div>
+      {% if gap.current_skills %}
+      <ul class="check-list">
+        {% for s in gap.current_skills %}<li><i class="fa-solid fa-circle-dot"></i> {{ s }}</li>{% endfor %}
+      </ul>
+      {% else %}<div class="empty-state small"><p>No skills recorded.</p></div>{% endif %}
+    </div>
+  </div>
+
+  <!-- Required skills -->
+  <div class="col-lg-4">
+    <div class="card-panel h-100">
+      <div class="panel-head"><h3><i class="fa-solid fa-id-badge"></i> Required Skills</h3></div>
+      {% if gap.required_skills %}
+      <ul class="check-list">
+        {% for s in gap.required_skills %}<li><i class="fa-solid fa-bullseye"></i> {{ s }}</li>{% endfor %}
+      </ul>
+      {% else %}<div class="empty-state small"><p>No required skills defined.</p></div>{% endif %}
+    </div>
+  </div>
+
+  <!-- Matched + Missing -->
+  <div class="col-lg-4">
+    <div class="card-panel h-100">
+      <div class="panel-head"><h3><i class="fa-solid fa-code-branch"></i> Gap Analysis</h3></div>
+      <h4 class="list-head ok"><i class="fa-solid fa-circle-check"></i> Matched Skills</h4>
+      {% if gap.matched_skills %}
+      <ul class="check-list ok">
+        {% for s in gap.matched_skills %}<li><i class="fa-solid fa-check"></i> {{ s }}</li>{% endfor %}
+      </ul>
+      {% else %}<p class="text-muted small">None matched.</p>{% endif %}
+      <h4 class="list-head miss mt-3"><i class="fa-solid fa-triangle-exclamation"></i> Missing Skills</h4>
+      {% if gap.missing_skills %}
+      <ul class="check-list miss">
+        {% for s in gap.missing_skills %}<li><i class="fa-solid fa-xmark"></i> {{ s }}</li>{% endfor %}
+      </ul>
+      {% else %}<p class="text-muted small">No gaps — all required skills covered!</p>{% endif %}
+    </div>
+  </div>
+</div>
+
+{% endif %}
+{% endblock %}
