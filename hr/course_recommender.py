@@ -1,5 +1,5 @@
 """
-course_recommender.py — Training recommendation engine (U2).
+course_recommender.py — Training recommendation engine.
 
 Given a SkillGap, recommends courses from MongoDB that cover the missing
 skills. Uses dictionaries and list comprehensions to build recommendation
@@ -14,8 +14,6 @@ from hr.skill_matcher import SkillGap
 class RecommendationError(Exception):
     """Raised when recommendations cannot be generated."""
 
-
-# Difficulty ordering used to sort recommendations (easier first).
 DIFFICULTY_ORDER = {
     'beginner': 1,
     'intermediate': 2,
