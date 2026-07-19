@@ -1,8 +1,6 @@
 """
-REST API views for TalentMap (U5).
+REST API views for TalentMap .
 
-Provides CRUD endpoints for employees, roles and courses backed by MongoDB.
-All endpoints require an authenticated HR session.
 """
 from bson.objectid import ObjectId
 from rest_framework import status
