@@ -109,7 +109,7 @@ def load_role_by_name(role_name: str) -> Role:
         raise RoleNotFoundError(f"Role '{role_name}' not found in the roles collection.")
     return Role.from_dict(data)
 
-
+# returns a SkillGap object representing the gap between an employee's skills and the required skills for a role.
 def compute_gap(employee: Employee, role: Role) -> SkillGap:
     current_set = employee.skill_set
     required_set = role.required_skill_set
@@ -155,7 +155,7 @@ def analyze_employee(employee_mongo_id: str, role_name: str = None) -> SkillGap:
     role = load_role_by_name(target_role)
     return compute_gap(employee, role)
 
-
+# loop through a list of employee IDs, analyze each one, and return a list of SkillGap objects. If an error occurs for an employee (e.g., role not found), it appends a SkillGap object with empty values for that employee instead of raising an exception.
 def analyze_employees_batch(employee_ids: List[str], role_name: str = None) -> List[SkillGap]:
    
     results = []
