@@ -96,10 +96,18 @@
           <div class="confirm-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
           <h4 class="confirm-title">Are you sure?</h4>
           <p class="confirm-text" id="confirmText">This action cannot be undone.</p>
+
+
           <div class="d-flex gap-2 justify-content-center mt-3">
             <button class="btn btn-soft" data-bs-dismiss="modal">Cancel</button>
-            <a href="#" class="btn btn-danger" id="confirmActionBtn">Delete</a>
-          </div>
+
+              <form id="confirmForm" method="post" style="display:inline;">
+                  {% csrf_token %}
+            <button type="submit" class="btn btn-danger" id="confirmActionBtn">
+            Delete
+            </button>
+            </form>
+        </div>
         </div>
       </div>
     </div>

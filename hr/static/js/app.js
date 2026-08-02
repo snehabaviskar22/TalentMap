@@ -40,15 +40,21 @@
     },
 
     confirm(url, text) {
-      const modalEl = document.getElementById('confirmModal');
-      if (!modalEl) return;
-      const textEl = document.getElementById('confirmText');
-      const btn = document.getElementById('confirmActionBtn');
-      if (textEl) textEl.textContent = text || 'This action cannot be undone.';
-      if (btn) btn.href = url;
-      const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-      modal.show();
-    },
+  const modalEl = document.getElementById('confirmModal');
+  if (!modalEl) return;
+
+  const textEl = document.getElementById('confirmText');
+  const form = document.getElementById('confirmForm');
+
+  if (textEl)
+      textEl.textContent = text || 'This action cannot be undone.';
+
+  if (form)
+      form.action = url;
+
+  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  modal.show();
+  },
   };
 
   window.TalentMap = TalentMap;
