@@ -1,5 +1,5 @@
 """
-regex_utils.py — Skill normalization helpers (U3).
+regex_utils.py — Skill normalization helpers.
 
 Cleans and normalizes skill strings so that "python", "PYTHON", "Python "
 and "  Python " all collapse to the canonical "Python".

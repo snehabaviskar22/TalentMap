@@ -1,9 +1,5 @@
 """
 Forms for TalentMap.
-
-HTML forms are rendered manually in templates for full control over the
-premium UI, but these Django Form classes back the validation so server-side
-checks are centralized and reusable.
 """
 from django import forms
 

@@ -1,5 +1,5 @@
 """
-MongoDB integration layer for TalentMap (U4).
+MongoDB integration layer for TalentMap.
 
 Centralizes all PyMongo access. Collections:
   - employees
