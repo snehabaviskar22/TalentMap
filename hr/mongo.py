@@ -17,22 +17,14 @@ from pymongo.errors import PyMongoError
 _client = None
 _db = None
 
-
 def _get_db():
     """Return the TalentMap Mongo database handle (lazy singleton)."""
     global _client, _db
+
     if _db is None:
-        print("MONGO URI EXISTS:", bool(settings.MONGO_URI))
-    print("MONGO DB NAME:", settings.MONGO_DB_NAME)
+        _client = MongoClient(settings.MONGO_URI)
+        _db = _client[settings.MONGO_DB_NAME]
 
-    _client = MongoClient(settings.MONGO_URI)
-
-    _client.admin.command('ping')
-    print("MONGODB CONNECTION SUCCESS")
-
-    _db = _client[settings.MONGO_DB_NAME]
-     #   _client = MongoClient(settings.MONGO_URI)
-      #  _db = _client[settings.MONGO_DB_NAME]
     return _db
 
 
