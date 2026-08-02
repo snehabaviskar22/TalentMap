@@ -1,91 +1,209 @@
-# TalentMap
+# TalentMap – Employee Skill Gap Analysis & Training Recommendation System
 
-## Employee Skill Gap Analysis & Training Recommendation System
-
-TalentMap is a web-based HR application developed using **Django** and **MongoDB** to help organizations identify employee skill gaps and recommend relevant training courses. The system compares an employee's existing skills with the required skills for their role and generates a detailed skill gap analysis along with personalized course recommendations.
-
-This project was developed as part of the **Master of Computer Applications (MCA)** curriculum to demonstrate the application of Python programming concepts, Django web development, MongoDB integration, and REST API development.
+A full-stack HR management web application developed using **Django**, **MongoDB Atlas**, and **Django REST Framework**. TalentMap enables HR administrators to manage employees, roles, and training courses while automatically identifying employee skill gaps and recommending relevant training programs based on role requirements.
 
 ---
 
-## Features
+# Live Demo
 
-- HR Authentication (Login/Logout)
-- Dashboard with workforce overview
-- Employee Management (Add, Edit, Delete, View)
-- Role Management
-- Course Management
-- Skill Gap Analysis
-- Course Recommendation System
-- Search and Filter Employees
-- MongoDB CRUD Operations
-- Django REST Framework (DRF) API support
+**Link:** https://talentmap-vtnx.onrender.com
 
 ---
 
-## Technologies Used
+# Objectives
 
-### Backend
-- Python 3
-- Django
-- Django REST Framework (DRF)
+The main objectives of this project are:
 
-### Database
-- MongoDB
-- PyMongo
-
-### Frontend
-- HTML5
-- CSS3
-- Bootstrap 5
-- JavaScript
-- Font Awesome
-
-### Python Concepts Demonstrated
-- Object-Oriented Programming (OOP)
-- Sets
-- Dictionaries
-- List Comprehensions
-- Regular Expressions (Regex)
-- Exception Handling
-- Threading
-- Modular Programming
+* Automate employee skill gap analysis.
+* Help HR identify missing skills for each employee.
+* Recommend relevant training courses based on missing skills.
+* Centralize employee, role, and course management.
+* Demonstrate Python programming concepts, Django development, MongoDB integration, and REST API development.
 
 ---
 
-## Project Structure
+# Features
+
+## HR Module
+
+* HR Login & Logout
+* Secure Authentication using Django Authentication System
+* Dashboard with workforce statistics
+* Manage Employees (Add, Edit, Delete, View)
+* Manage Roles (Add, Edit, Delete)
+* Manage Training Courses (Add, Edit, Delete)
+* Search and Filter Employees
+* Responsive Dashboard
+* Cloud Deployment using Render
+
+---
+
+## Skill Gap Analysis
+
+The system automatically compares employee skills with the required skills for their assigned role.
+
+* Identifies missing skills
+* Generates Skill Gap Reports
+* Displays matched and missing skills
+* Uses Python Set Operations for comparison
+
+---
+
+## Training Recommendation System
+
+Based on the identified skill gaps, the system automatically recommends relevant training courses.
+
+* Course recommendations based on missing skills
+* Multiple recommendations for multiple missing skills
+* Dynamic course management through MongoDB
+
+---
+
+# Technology Stack
+
+## Backend
+
+* Python 3
+* Django 4
+* Django REST Framework (DRF)
+
+## Database
+
+* MongoDB Atlas
+* PyMongo
+* SQLite (Authentication, Admin & Sessions)
+
+## Frontend
+
+* HTML5
+* CSS3
+* Bootstrap 5
+* JavaScript
+* Font Awesome
+
+## Deployment
+
+* Render
+* MongoDB Atlas
+* GitHub
+
+---
+
+# Python Concepts Demonstrated
+
+* Object-Oriented Programming (OOP)
+* Sets
+* Dictionaries
+* List Comprehensions
+* Regular Expressions (Regex)
+* Exception Handling
+* Threading
+* Modular Programming
+
+---
+
+# Project Structure
 
 ```text
 TalentMap/
-│── manage.py
-│── requirements.txt
-│── README.md
-│── .gitignore
 │
-├── talentmap/
 ├── hr/
-├── api/
+├── talentmap/
 ├── templates/
-└── static/
+├── static/
+├── staticfiles/
+├── manage.py
+├── db.sqlite3
+├── requirements.txt
+├── README.md
+└── .gitignore
 ```
 
 ---
 
-## Installation
+# Database Design
 
-### 1. Clone the Repository
+## MongoDB Collections
+
+* Employees
+* Roles
+* Courses
+
+## SQLite Tables
+
+* Django Users
+* Authentication
+* Sessions
+* Admin Data
+
+## Relationships
+
+* One Role → Multiple Employees
+* One Course → One Skill
+* One Employee → One Assigned Role
+* One Role → Multiple Required Skills
+
+---
+
+# Authentication
+
+* Django Authentication System
+* Session-Based Authentication
+* HR Login
+* Protected Routes using `@login_required`
+* Django Admin Support
+
+---
+
+# REST API Endpoints
+
+## Employees
+
+* GET `/api/employees/`
+* GET `/api/employees/<id>/`
+* POST `/api/employees/`
+* PUT `/api/employees/<id>/`
+* DELETE `/api/employees/<id>/`
+
+## Roles
+
+* GET `/api/roles/`
+* POST `/api/roles/`
+* PUT `/api/roles/<id>/`
+* DELETE `/api/roles/<id>/`
+
+## Courses
+
+* GET `/api/courses/`
+* POST `/api/courses/`
+* PUT `/api/courses/<id>/`
+* DELETE `/api/courses/<id>/`
+
+---
+
+# Setup Instructions
+
+## Prerequisites
+
+* Python 3.10+
+* MongoDB Atlas (or MongoDB Community Server)
+* Git
+
+---
+
+## Clone Repository
 
 ```bash
-git clone https://github.com/<your-username>/TalentMap.git
+git clone https://github.com/snehabaviskar22/TalentMap.git
 ```
-
-### 2. Navigate to the Project
 
 ```bash
 cd TalentMap
 ```
 
-### 3. Create a Virtual Environment
+---
+
+## Create Virtual Environment
 
 Windows
 
@@ -93,15 +211,15 @@ Windows
 python -m venv venv
 ```
 
-### 4. Activate the Virtual Environment
-
-Windows
+Activate
 
 ```bash
 venv\Scripts\activate
 ```
 
-### 5. Install Required Packages
+---
+
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -109,105 +227,121 @@ pip install -r requirements.txt
 
 ---
 
+## Configure Environment Variables
+
+Create a `.env` file (or configure these variables on Render):
+
+```env
+DJANGO_SECRET_KEY=your_secret_key
+
+DJANGO_DEBUG=True
+
+MONGO_URI=your_mongodb_connection_string
+
+MONGO_DB_NAME=TalentMap
+```
+
+---
+
 ## Database Setup
 
-This project uses:
-
-- MongoDB (Employee, Role and Course data)
-- SQLite (Django Authentication and Sessions)
-
-### Apply Django Migrations
+Apply Django migrations
 
 ```bash
 python manage.py migrate
 ```
 
-### Create HR Login
+Create an HR administrator account
 
 ```bash
 python manage.py createsuperuser
 ```
 
-Follow the prompts to create your username and password.
-
 ---
 
-## Running the Project
-
-Start the Django development server.
+## Run the Project
 
 ```bash
 python manage.py runserver
 ```
 
-Open your browser and visit
+Open
 
 ```
 http://127.0.0.1:8000/
 ```
 
-Login using the HR credentials created with `createsuperuser`.
+Login using the HR administrator credentials created through `createsuperuser`.
 
 ---
 
-## Core Modules
+# Screenshots
 
-- Employee Management
-- Role Management
-- Course Management
-- Skill Gap Analysis
-- Course Recommendation Engine
-- HR Dashboard
-- REST API
+## Login Page
+
+*(Add Screenshot)*
 
 ---
 
-## Python Concepts Used
+## Dashboard
 
-### Unit 1
-- Sets for skill comparison
-- Dictionaries for role-skill mapping
-- List Comprehensions
-
-### Unit 2
-- Custom Modules
-- Exception Handling
-
-### Unit 3
-- Object-Oriented Programming
-- Regular Expressions
-- Threading
-
-### Unit 4
-- MongoDB CRUD Operations
-
-### Unit 5
-- Django Web Framework
-- Django REST Framework (DRF)
+*(Add Screenshot)*
 
 ---
 
-## Future Enhancements
+## Employee Management
 
-- AI-based training recommendations
-- Resume skill extraction
-- Email notifications
-- Employee performance analytics
-- Charts and dashboard analytics
-- PDF report generation
-- JWT Authentication
-- Docker deployment
+*(Add Screenshot)*
 
 ---
 
-## Author
+## Role Management
+
+*(Add Screenshot)*
+
+---
+
+## Course Management
+
+*(Add Screenshot)*
+
+---
+
+## Skill Gap Report
+
+*(Add Screenshot)*
+
+---
+
+## Training Recommendations
+
+*(Add Screenshot)*
+
+---
+
+# Future Enhancements
+
+* AI-Based Training Recommendations
+* Resume Skill Extraction
+* Employee Performance Analytics
+* Interactive Dashboard Charts
+* PDF Report Generation
+* JWT Authentication
+* Docker Deployment
+* Email Notifications
+
+---
+
+# Author
 
 **Sneha Baviskar**
 
-Master of Computer Applications (MCA)
+MCA Student
+
+Savitribai Phule Pune University
 
 ---
 
-## License
+# License
 
-This project is developed for educational and learning purposes.
+This project is developed for academic and educational purposes.
