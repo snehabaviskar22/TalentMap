@@ -279,43 +279,50 @@ Login using the HR administrator credentials created through `createsuperuser`.
 
 ## Login Page
 
-*(Add Screenshot)*
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/810d2146-ba5e-454e-9d0e-5f570d63cffe" />
+
 
 ---
 
 ## Dashboard
 
-*(Add Screenshot)*
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9749b7b4-3db8-4658-a1fc-21a103151837" />
+
 
 ---
 
 ## Employee Management
 
-*(Add Screenshot)*
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e3cf776d-03c6-4efd-9cf4-34cd96c3916d" />
+
 
 ---
 
 ## Role Management
 
-*(Add Screenshot)*
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8c4bcea8-0025-4e4f-8ca2-c1b5fb1ef3dc" />
+
 
 ---
 
 ## Course Management
 
-*(Add Screenshot)*
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/892f6d1d-da76-4653-80e4-944f49eeafff" />
+
 
 ---
 
 ## Skill Gap Report
 
-*(Add Screenshot)*
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4d1e0671-517f-491e-9de6-ce3f5bc8046c" />
+
 
 ---
 
 ## Training Recommendations
 
-*(Add Screenshot)*
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2e0fce6d-2ae3-499c-abac-9d00d84275c7" />
+
 
 ---
 
@@ -324,10 +331,7 @@ Login using the HR administrator credentials created through `createsuperuser`.
 * AI-Based Training Recommendations
 * Resume Skill Extraction
 * Employee Performance Analytics
-* Interactive Dashboard Charts
 * PDF Report Generation
-* JWT Authentication
-* Docker Deployment
 * Email Notifications
 
 ---
